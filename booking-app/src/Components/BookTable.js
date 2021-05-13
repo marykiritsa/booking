@@ -1,42 +1,52 @@
 import React from 'react';
 
+import getAllBooks, { name } from '../api/books';
 import GroupOfButtons from '../Components/GroupOfButtons';
 
-const BookTable = () => {
+class BookTable extends React.Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      books: [],
+    };
+  }
+
+  componentDidMount() {
+    getAllBooks().then((data) => {
+      this.setState({
+        books: data,
+      });
+  })
+
+  
+}
+ renderBook(book) {
   return(
-    <table align="center" className="bookings">
+    <tr key={book.id}>
+      <td>{book.id + 1}</td>
+      <td><strong>{book.number + "; "}</strong>
+      {book.day + " -> " + book.place}</td>
+      <td><GroupOfButtons /></td>
+    </tr>  
+  )
+}
+
+  render(){
+    return(
+      <table align="center" className="orders"> 
       <thead>
         <tr>
           <th>id</th>
-          <th>Person Name</th>
+          <th>Books</th>
           <th>Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>Person 1</td>
-          <td>
-            <GroupOfButtons />
-          </td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Person 2</td>
-          <td>
-            <GroupOfButtons />
-          </td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Person 3</td>
-          <td>
-            <GroupOfButtons />
-          </td>
-        </tr>
+        {this.state.books.map(this.renderBook)}
       </tbody>
     </table>
-  )
+    )
+  }
 }
 
 export default BookTable;
